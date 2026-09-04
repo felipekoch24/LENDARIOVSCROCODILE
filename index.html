@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>O Lendário vs Crocodilo</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Impact', sans-serif;
+            background-color: #000;
+            user-select: none;
+        }
+
+        #game-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background-image: url('fundo_agua.png');
+            background-size: cover;
+            background-position: center;
+        }
+
+        #game-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1;
+        }
+
+        /* Tela de Entrada: a tela inteira agora é clicável para iniciar */
+        #tela-inicio {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('capa_jogo.png');
+            background-size: cover;
+            background-position: center;
+            z-index: 100;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Placar e Recorde */
+        #ui {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            color: #00ffcc;
+            font-size: 22px;
+            z-index: 20;
+            text-shadow: 2px 2px #000;
+        }
+
+        /* Crocodilo */
+        #crocodilo-container {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            text-align: center;
+            z-index: 5;
+        }
+
+        #crocodilo {
+            width: 100%;
+            height: auto;
+        }
+
+        /* O Lendário */
+        #lendario {
+            position: absolute;
+            bottom: 110px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 110px;
+            z-index: 10;
+        }
+
+        .bomba-voando {
+            position: absolute;
+            font-size: 35px;
+            z-index: 15;
+            transition: all 0.3s ease-out;
+        }
+
+        /* Controles Fixos e Visíveis */
+        #controles {
+            position: absolute;
+            bottom: 15px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 0 10px;
+            z-index: 50;
+        }
+
+        .btn-acao {
+            background-color: #1e293b;
+            color: white;
+            border: 3px solid #00ffcc;
+            font-size: 18px;
+            padding: 15px 20px;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0px 4px 12px rgba(0,0,0,0.7);
+        }
+
+        .btn-acao:active {
+            background-color: #00ffcc;
+            color: black;
+        }
+
+        #btn-jogar {
+            background-color: #ffcc00;
+            color: black;
+            border: 3px solid white;
+            font-size: 20px;
+            padding: 15px 25px;
+        }
+
+        /* Tela de Game Over */
+        #game-over {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 60;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        #game-over h1 {
+            font-size: 45px;
+            color: #ff3333;
+            margin-bottom: 5px;
+            text-shadow: 3px 3px #000;
+        }
+
+        #game-over p {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        #btn-reiniciar {
+            background-color: #00ffcc;
+            color: black;
+            border: none;
+            padding: 15px 30px;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="game-container">
+        <!-- Tela de Entrada: Toque em qualquer lugar na capa para jogar -->
+        <div id="tela-inicio" ontouchstart="iniciarJogo()" onclick="iniciarJogo()"></div>
+
+        <div id="ui">
+            Pontos: <span id="pontos">0</span><br>
+            Recorde: <span id="recorde">0</span>
+        </div>
+
+        <!-- Crocodilo -->
+        <div id="crocodilo-container" style="top: 20px;">
+            <img id="crocodilo" src="crocodilo_recortado.png" alt="Crocodilo">
+        </div>
+
+        <!-- O Lendário -->
+        <img id="lendario" src="lendario_recortado.png" alt="O Lendário" style="left: 50%;">
+
+        <!-- Botões de Controle -->
+        <div id="controles">
+            <button class="btn-acao" ontouchstart="moverEsquerda()" onclick="moverEsquerda()">◀ ESQ</button>
+            <button class="btn-acao" id="btn-jogar" ontouchstart="lancarBomba()" onclick="lancarBomba()">💣 JOGAR</button>
+            <button class="btn-acao" ontouchstart="moverDireita()" onclick="moverDireita()">DIR ▶</button>
+        </div>
+
+        <!-- Tela de Game Over -->
+        <div id="game-over">
+            <h1>GAME OVER</h1>
+            <p id="texto-fim">O crocodilo pegou o Lendário!</p>
+            <button id="btn-reiniciar" ontouchstart="reiniciarJogo()" onclick="reiniciarJogo()">JOGAR DE NOVO</button>
+        </div>
+    </div>
+
+    <script>
+        let pontos = 0;
+        let recorde = localStorage.getItem('recorde_croc') || 0;
+        let velocidadeCroc = 1.2;
+        let jogoAtivo = false;
+        let posLendarioX = window.innerWidth / 2;
+
+        document.getElementById('recorde').innerText = recorde;
+
+        const crocContainer = document.getElementById('crocodilo-container');
+        const lendario = document.getElementById('lendario');
+        const pontosSpan = document.getElementById('pontos');
+        const recordeSpan = document.getElementById('recorde');
+        const gameOverScreen = document.getElementById('game-over');
+        const telaInicio = document.getElementById('tela-inicio');
+
+        function iniciarJogo() {
+            telaInicio.style.display = 'none';
+            jogoAtivo = true;
+            atualizarJogo();
+        }
+
+        function moverEsquerda() {
+            if (!jogoAtivo) return;
+            posLendarioX -= 35;
+            if (posLendarioX < 40) posLendarioX = 40;
+            lendario.style.left = posLendarioX + 'px';
+            lendario.style.transform = 'translateX(-50%) scaleX(-1)';
+        }
+
+        function moverDireita() {
+            if (!jogoAtivo) return;
+            posLendarioX += 35;
+            if (posLendarioX > window.innerWidth - 40) posLendarioX = window.innerWidth - 40;
+            lendario.style.left = posLendarioX + 'px';
+            lendario.style.transform = 'translateX(-50%) scaleX(1)';
+        }
+
+        function atualizarJogo() {
+            if (!jogoAtivo) return;
+
+            let topoAtual = parseInt(crocContainer.style.top);
+            
+            if (topoAtual > window.innerHeight - 250) {
+                jogoAtivo = false;
+                
+                if (pontos > recorde) {
+                    recorde = pontos;
+                    localStorage.setItem('recorde_croc', recorde);
+                    recordeSpan.innerText = recorde;
+                    document.getElementById('texto-fim').innerText = "NOVO RECORDE! 🏆";
+                } else {
+                    document.getElementById('texto-fim').innerText = "O crocodilo pegou o Lendário!";
+                }
+
+                gameOverScreen.style.display = 'flex';
+            } else {
+                crocContainer.style.top = (topoAtual + velocidadeCroc) + 'px';
+                requestAnimationFrame(atualizarJogo);
+            }
+        }
+
+        function lancarBomba() {
+            if (!jogoAtivo) return;
+
+            const gameContainer = document.getElementById('game-container');
+            const bomba = document.createElement('div');
+            bomba.classList.add('bomba-voando');
+            bomba.innerHTML = '💣';
+            
+            bomba.style.left = posLendarioX + 'px';
+            bomba.style.bottom = '160px';
+            gameContainer.appendChild(bomba);
+
+            setTimeout(() => {
+                bomba.style.bottom = (window.innerHeight - parseInt(crocContainer.style.top) - 50) + 'px';
+            }, 10);
+
+            setTimeout(() => {
+                const rectCroc = crocContainer.getBoundingClientRect();
+                const rectBomba = bomba.getBoundingClientRect();
+
+                let acertou = (
+                    rectBomba.left < rectCroc.right &&
+                    rectBomba.right > rectCroc.left &&
+                    rectBomba.top < rectCroc.bottom
+                );
+
+                if (acertou) {
+                    pontos++;
+                    pontosSpan.innerText = pontos;
+                    crocContainer.style.top = '20px';
+                    velocidadeCroc += 0.3;
+                }
+
+                bomba.remove();
+            }, 300);
+        }
+
+        function reiniciarJogo() {
+            pontos = 0;
+            velocidadeCroc = 1.2;
+            pontosSpan.innerText = pontos;
+            crocContainer.style.top = '20px';
+            gameOverScreen.style.display = 'none';
+            jogoAtivo = true;
+            atualizarJogo();
+        }
+    </script>
+</body>
+</html>
