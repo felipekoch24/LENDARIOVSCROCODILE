@@ -1,0 +1,213 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+body, html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Impact', sans-serif;
+    background-color: #000;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+#game-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-image: url('fundo_agua.png');
+    background-size: cover;
+    background-position: center;
+}
+
+#game-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1;
+}
+
+#tela-inicio {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('capa_jogo.png');
+    background-size: cover;
+    background-position: center;
+    z-index: 100;
+    cursor: pointer;
+}
+
+#ui {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    color: #00ffcc;
+    font-size: 20px;
+    z-index: 20;
+    text-shadow: 2px 2px #000;
+}
+
+/* Barra de Vida do Crocodilo */
+#boss-ui {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 130px;
+    text-align: right;
+    z-index: 20;
+    color: #ff3333;
+    font-size: 16px;
+    text-shadow: 1px 1px #000;
+}
+
+#barra-vida-container {
+    width: 100%;
+    height: 14px;
+    background: #333;
+    border: 2px solid #fff;
+    border-radius: 7px;
+    margin-top: 4px;
+    overflow: hidden;
+}
+
+#barra-vida-atual {
+    width: 100%;
+    height: 100%;
+    background: #ff3333;
+    transition: width 0.2s ease;
+}
+
+/* Crocodilo */
+#crocodilo-container {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150px;
+    text-align: center;
+    z-index: 5;
+    transition: transform 0.1s;
+}
+
+#crocodilo {
+    width: 100%;
+    height: auto;
+}
+
+/* O Lendário */
+#lendario {
+    position: absolute;
+    bottom: 110px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 110px;
+    z-index: 10;
+}
+
+.bomba-voando {
+    position: absolute;
+    font-size: 35px;
+    z-index: 15;
+    transition: all 0.3s ease-out;
+}
+
+.explosao {
+    position: absolute;
+    font-size: 60px;
+    z-index: 25;
+    transform: translate(-50%, -50%);
+    animation: explodirAnim 0.4s forwards;
+}
+
+@keyframes explodirAnim {
+    0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
+}
+
+#controles {
+    position: absolute;
+    bottom: 15px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 10px;
+    z-index: 50;
+}
+
+.btn-acao {
+    background-color: #1e293b;
+    color: white;
+    border: 3px solid #00ffcc;
+    font-size: 18px;
+    padding: 15px 20px;
+    border-radius: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.7);
+    -webkit-tap-highlight-color: transparent;
+}
+
+.btn-acao:active {
+    background-color: #00ffcc;
+    color: black;
+}
+
+#btn-jogar {
+    background-color: #ffcc00;
+    color: black;
+    border: 3px solid white;
+    font-size: 20px;
+    padding: 15px 25px;
+}
+
+/* Telas de Fim / Vitória / Derrota */
+.tela-overlay {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.88);
+    z-index: 60;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+.tela-overlay h1 {
+    font-size: 42px;
+    margin-bottom: 10px;
+    text-shadow: 3px 3px #000;
+}
+
+.tela-overlay p {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.btn-menu {
+    background-color: #00ffcc;
+    color: black;
+    border: none;
+    padding: 15px 30px;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    text-transform: uppercase;
+}
