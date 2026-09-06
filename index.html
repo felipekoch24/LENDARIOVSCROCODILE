@@ -5,230 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>O Lendário vs Crocodilos</title>
 
+    <!-- Configurações para iPhone / Safari -->
     <link rel="apple-touch-icon" href="icone_jogo.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Lendário vs Croc">
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        body, html {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            font-family: 'Impact', sans-serif;
-            background-color: #000;
-            user-select: none;
-            -webkit-user-select: none;
-        }
-
-        #game-container {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            background-image: url('fundo_agua.png');
-            background-size: cover;
-            background-position: center;
-        }
-
-        #game-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            z-index: 1;
-        }
-
-        #tela-inicio {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('capa_jogo.png');
-            background-size: cover;
-            background-position: center;
-            z-index: 100;
-            cursor: pointer;
-        }
-
-        #ui {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            color: #00ffcc;
-            font-size: 20px;
-            z-index: 20;
-            text-shadow: 2px 2px #000;
-        }
-
-        /* Barra de Vida do Crocodilo */
-        #boss-ui {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            width: 130px;
-            text-align: right;
-            z-index: 20;
-            color: #ff3333;
-            font-size: 16px;
-            text-shadow: 1px 1px #000;
-        }
-
-        #barra-vida-container {
-            width: 100%;
-            height: 14px;
-            background: #333;
-            border: 2px solid #fff;
-            border-radius: 7px;
-            margin-top: 4px;
-            overflow: hidden;
-        }
-
-        #barra-vida-atual {
-            width: 100%;
-            height: 100%;
-            background: #ff3333;
-            transition: width 0.2s ease;
-        }
-
-        /* Crocodilo */
-        #crocodilo-container {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 150px;
-            text-align: center;
-            z-index: 5;
-            transition: transform 0.1s;
-        }
-
-        #crocodilo {
-            width: 100%;
-            height: auto;
-        }
-
-        /* O Lendário */
-        #lendario {
-            position: absolute;
-            bottom: 110px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 110px;
-            z-index: 10;
-        }
-
-        .bomba-voando {
-            position: absolute;
-            font-size: 35px;
-            z-index: 15;
-            transition: all 0.3s ease-out;
-        }
-
-        .explosao {
-            position: absolute;
-            font-size: 60px;
-            z-index: 25;
-            transform: translate(-50%, -50%);
-            animation: explodirAnim 0.4s forwards;
-        }
-
-        @keyframes explodirAnim {
-            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
-        }
-
-        #controles {
-            position: absolute;
-            bottom: 15px;
-            left: 0;
-            width: 100%;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 0 10px;
-            z-index: 50;
-        }
-
-        .btn-acao {
-            background-color: #1e293b;
-            color: white;
-            border: 3px solid #00ffcc;
-            font-size: 18px;
-            padding: 15px 20px;
-            border-radius: 12px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0px 4px 12px rgba(0,0,0,0.7);
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .btn-acao:active {
-            background-color: #00ffcc;
-            color: black;
-        }
-
-        #btn-jogar {
-            background-color: #ffcc00;
-            color: black;
-            border: 3px solid white;
-            font-size: 20px;
-            padding: 15px 25px;
-        }
-
-        /* Telas de Fim / Vitória / Derrota */
-        .tela-overlay {
-            display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.88);
-            z-index: 60;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .tela-overlay h1 {
-            font-size: 42px;
-            margin-bottom: 10px;
-            text-shadow: 3px 3px #000;
-        }
-
-        .tela-overlay p {
-            font-size: 20px;
-            margin-bottom: 20px;
-        }
-
-        .btn-menu {
-            background-color: #00ffcc;
-            color: black;
-            border: none;
-            padding: 15px 30px;
-            font-size: 20px;
-            font-weight: bold;
-            border-radius: 10px;
-            cursor: pointer;
-            text-transform: uppercase;
-        }
-    </style>
+    <!-- Chamada do arquivo de estilo separado -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div id="game-container">
+        <!-- Tela Inicial -->
         <div id="tela-inicio" ontouchstart="iniciarJogo()" onclick="iniciarJogo()"></div>
 
         <div id="ui">
@@ -243,24 +32,29 @@
             </div>
         </div>
 
+        <!-- Crocodilo -->
         <div id="crocodilo-container" style="top: 20px;">
             <img id="crocodilo" src="crocodilo_recortado.png" alt="Crocodilo">
         </div>
 
+        <!-- O Lendário -->
         <img id="lendario" src="lendario_recortado.png" alt="O Lendário" style="left: 50%;">
 
+        <!-- Botões -->
         <div id="controles">
             <button class="btn-acao" ontouchstart="moverEsquerda()" onclick="moverEsquerda()">◀ ESQ</button>
             <button class="btn-acao" id="btn-jogar" ontouchstart="lancarBomba()" onclick="lancarBomba()">💣 JOGAR</button>
             <button class="btn-acao" ontouchstart="moverDireita()" onclick="moverDireita()">DIR ▶</button>
         </div>
 
+        <!-- Tela de Derrota -->
         <div id="tela-gameover" class="tela-overlay">
             <h1 style="color: #ff3333;">FIM DE JOGO</h1>
             <p>O crocodilo te pegou! Tente novamente e mostre sua força.</p>
             <button class="btn-menu" ontouchstart="reiniciarJogo()" onclick="reiniciarJogo()">TENTAR NOVAMENTE</button>
         </div>
 
+        <!-- Tela de Vitória da Fase -->
         <div id="tela-vitoria" class="tela-overlay">
             <h1 style="color: #00ffcc;">VITÓRIA! 🏆</h1>
             <p id="texto-vitoria">Você explodiu o crocodilo!</p>
@@ -268,149 +62,7 @@
         </div>
     </div>
 
-    <script>
-        let pontos = 0;
-        let fase = 1;
-        let vidaMaxCroc = 3;
-        let vidaAtualCroc = 3;
-        let velocidadeCroc = 1.0;
-        let jogoAtivo = false;
-        let posLendarioX = window.innerWidth / 2;
-
-        const crocContainer = document.getElementById('crocodilo-container');
-        const lendario = document.getElementById('lendario');
-        const pontosSpan = document.getElementById('pontos');
-        const faseSpan = document.getElementById('fase');
-        const barraVidaAtual = document.getElementById('barra-vida-atual');
-        const telaGameOver = document.getElementById('tela-gameover');
-        const telaVitoria = document.getElementById('tela-vitoria');
-        const telaInicio = document.getElementById('tela-inicio');
-
-        function iniciarJogo() {
-            telaInicio.style.display = 'none';
-            jogoAtivo = true;
-            atualizarBarraVida();
-            animarLoop();
-        }
-
-        function moverEsquerda() {
-            if (!jogoAtivo) return;
-            posLendarioX -= 35;
-            if (posLendarioX < 40) posLendarioX = 40;
-            lendario.style.left = posLendarioX + 'px';
-            lendario.style.transform = 'translateX(-50%) scaleX(-1)';
-        }
-
-        function moverDireita() {
-            if (!jogoAtivo) return;
-            posLendarioX += 35;
-            if (posLendarioX > window.innerWidth - 40) posLendarioX = window.innerWidth - 40;
-            lendario.style.left = posLendarioX + 'px';
-            lendario.style.transform = 'translateX(-50%) scaleX(1)';
-        }
-
-        function atualizarBarravida() {
-            let porcentagem = (vidaAtualCroc / vidaMaxCroc) * 100;
-            barraVidaAtual.style.width = porcentagem + '%';
-        }
-
-        function animarLoop() {
-            if (!jogoAtivo) return;
-
-            let topoAtual = parseInt(crocContainer.style.top);
-            
-            // Chegou embaixo (Game Over)
-            if (topoAtual > window.innerHeight - 250) {
-                jogoAtivo = false;
-                telaGameOver.style.display = 'flex';
-                return;
-            }
-
-            crocContainer.style.top = (topoAtual + velocidadeCroc) + 'px';
-            requestAnimationFrame(animarLoop);
-        }
-
-        function lancarBomba() {
-            if (!jogoAtivo) return;
-
-            const gameContainer = document.getElementById('game-container');
-            const bomba = document.createElement('div');
-            bomba.classList.add('bomba-voando');
-            bomba.innerHTML = '💣';
-            
-            bomba.style.left = posLendarioX + 'px';
-            bomba.style.bottom = '160px';
-            gameContainer.appendChild(bomba);
-
-            setTimeout(() => {
-                bomba.style.bottom = (window.innerHeight - parseInt(crocContainer.style.top) - 50) + 'px';
-            }, 10);
-
-            setTimeout(() => {
-                const rectCroc = crocContainer.getBoundingClientRect();
-                const rectBomba = bomba.getBoundingClientRect();
-
-                let acertou = (
-                    rectBomba.left < rectCroc.right &&
-                    rectBomba.right > rectCroc.left &&
-                    rectBomba.top < rectCroc.bottom
-                );
-
-                if (acertou) {
-                    vidaAtualCroc--;
-                    pontos += 10;
-                    pontosSpan.innerText = pontos;
-                    atualizarBarravida();
-
-                    // Criar Efeito de Explosão na boca
-                    const explosao = document.createElement('div');
-                    explosao.classList.add('explosao');
-                    explosao.innerHTML = '💥';
-                    explosao.style.left = (rectCroc.left + rectCroc.width/2) + 'px';
-                    explosao.style.top = (rectCroc.top + 40) + 'px';
-                    gameContainer.appendChild(explosao);
-                    setTimeout(() => explosao.remove(), 400);
-
-                    // Se o crocodilo ficou sem vida (Derrotado na fase)
-                    if (vidaAtualCroc <= 0) {
-                        jogoAtivo = false;
-                        document.getElementById('texto-vitoria').innerText = `Você destruiu o Crocodilo da Fase ${fase}!`;
-                        telaVitoria.style.display = 'flex';
-                    }
-                }
-
-                bomba.remove();
-            }, 300);
-        }
-
-        function proximaFase() {
-            fase++;
-            faseSpan.innerText = fase;
-            vidaMaxCroc += 2; // Aumenta a vida do crocodilo nas próximas fases
-            vidaAtualCroc = vidaMaxCroc;
-            velocidadeCroc += 0.3; // Fica um pouco mais rápido
-
-            crocContainer.style.top = '20px';
-            telaVitoria.style.display = 'none';
-            atualizarBarravida();
-            jogoAtivo = true;
-            animarLoop();
-        }
-
-        function reiniciarJogo() {
-            pontos = 0;
-            fase = 1;
-            vidaMaxCroc = 3;
-            vidaAtualCroc = 3;
-            velocidadeCroc = 1.0;
-            pontosSpan.innerText = pontos;
-            faseSpan.innerText = fase;
-            crocContainer.style.top = '20px';
-            telaGameOver.style.display = 'none';
-            atualizarBarravida();
-            jogoAtivo = true;
-            animarLoop();
-        }
-    </script>
+    <!-- Chamada do arquivo de lógica separado -->
+    <script src="jogo.js"></script>
 </body>
 </html>
